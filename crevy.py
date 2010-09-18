@@ -57,6 +57,9 @@ db = XRecord.connect('mysql', name='jcopenha', host='localhost',
                      port=3306, user='root', password='password')
 for post in db.XArray("wp_posts"):
     if post.post_type == "post":
-        toc.addPage(post.post_title, post.post_name, post.post_date, post.post_content.replace(u'\xa0',''))
+        # no idea why i have non-ascii values in the DB but I do
+        # and 'write' complains about them, so we'll filter them out
+        content = ''.join([x for x in post.post_content if ord(x) < 128])
+        toc.addPage(post.post_title, post.post_name, post.post_date, content)
 
 toc.outputTOC()
