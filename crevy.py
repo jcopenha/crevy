@@ -30,7 +30,7 @@ class TOC:
                                content))
 
     def makelink(self, title, link):
-        html = "<A HREF=\""+str(link)+"\">"+str(title)+"</A>"
+        html = "<A HREF=\""+str(link)+".html\">"+str(title)+"</A>"
         return html
 
     def outputTOC(self):
