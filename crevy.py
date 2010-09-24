@@ -8,6 +8,13 @@ class Page:
         self.link = link
         self.date = date
         self.content = content
+        # should start with <p>
+        # 0x13 0x10 - two in a row is </p><p>
+        # 0x13 0x10 - only one it <br />
+        self.content = "<p>" + self.content
+        self.content = self.content.replace("\r\n\r\n","</p><p>")
+        self.content = self.content.replace("\r\n","<br />")
+        self.content = self.content + "</p>"
         # need two links 
         # typedef.org/jcopenha/title
         # typedef.org/jcopenha/year/month/day/title
@@ -15,7 +22,16 @@ class Page:
 
     def tohtml(self):
         file = open(self.link+".html","wt")
+        file.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN")
+        file.write("\"http://www.w3.org/TR/html4/strict.dtd\">")
+        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"simple.css\">")
+        file.write("<body>")
+        file.write("<div id=\"wrap\">")
+        file.write("<div id=\"main\">")
         file.write(self.content)
+        file.write("</div>")
+        file.write("</div>")
+        file.write("</body>")
         file.close()
 
 class TOC:
