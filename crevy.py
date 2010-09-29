@@ -22,16 +22,22 @@ class Page:
 
     def tohtml(self):
         file = open(self.link+".html","wt")
-        file.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN")
-        file.write("\"http://www.w3.org/TR/html4/strict.dtd\">")
-        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"simple.css\">")
-        file.write("<body>")
-        file.write("<div id=\"wrap\">")
-        file.write("<div id=\"main\">")
+        file.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\n")
+        file.write("\"http://www.w3.org/TR/html4/strict.dtd\">\n")
+        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"simple.css\">\n")
+        file.write("<body>\n")
+        file.write("<div id=\"wrap\">\n")
+        file.write("<div id=\"header\">\n")
+        file.write(self.title)
+        file.write("</div>\n")
+        file.write("<div id=\"main\">\n")
         file.write(self.content)
-        file.write("</div>")
-        file.write("</div>")
-        file.write("</body>")
+        file.write("</div>\n")
+        file.write("<div id=\"footer\">\n")
+        file.write("<a href=\"index.html\">HOME</a>\n")
+        file.write("</div>\n")
+        file.write("</div>\n")
+        file.write("</body>\n")
         file.close()
 
 class TOC:
@@ -54,13 +60,25 @@ class TOC:
         self.pages.reverse()
 
         file = open("index.html", "wt")
+        file.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\n")
+        file.write("\"http://www.w3.org/TR/html4/strict.dtd\">\n")
+        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"simple.css\">\n")
         print >>file, "<HTML><BODY>"
+        file.write("<div id=\"wrap\">\n")
+        file.write("<div id=\"main\">\n")
+        print >>file, "<p>After running my blog with Drupal and then WordPress"
+        print >>file, " I've finally switched to completely static pages. I stopped"
+        print >>file, " updating a long time ago so no big loss.</p>"
+        print >>file, "<p>You can find me on twitter as <a href=\"http://www.twitter.com/jcopenha\">@jcopenha</a>"
+        print >>file, "and on most other social sites as jcopenha</p>"
         print >>file, "<UL>"
         
         for p in self.pages:
             print >>file, "<LI>", self.makelink(p.title, p.link)
 
         print >>file, "</UL>"
+        file.write("</div>\n")
+        file.write("</div>\n")
         print >>file, "</BODY></HTML>"
         file.close()
 
