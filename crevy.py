@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import datetime
 import XRecord
+import os
 
 class Page:
     def __init__(self, title, link, date, content):
@@ -21,10 +22,15 @@ class Page:
         # TOC can just link to first one but we'll have to generate two html files
 
     def tohtml(self):
-        file = open(self.link+".html","wt")
+        filename = self.makelink().split('"')[1]
+        try:
+            os.makedirs(filename)
+        except:
+            print "j"
+        file = open(filename+"index.html","wt")
         file.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\n")
         file.write("\"http://www.w3.org/TR/html4/strict.dtd\">\n")
-        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"simple.css\">\n")
+        file.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../../simple.css\">\n")
         file.write("<body>\n")
         file.write("<div id=\"wrap\">\n")
         file.write("<div id=\"header\">\n")
@@ -40,6 +46,13 @@ class Page:
         file.write("</body>\n")
         file.close()
 
+    def makelink(self):
+        s = str(self.date.year)
+        s = s + "/%02d" % self.date.month
+        s = s + "/%02d/" % self.date.day
+        html = "<A HREF=\""+s+str(self.link)+"/\">"+str(self.title)+"</A>"
+        return html
+
 class TOC:
     def __init__(self):
         self.pages = list()
@@ -50,10 +63,6 @@ class TOC:
                                link, 
                                datetime.datetime.strptime(str(date), format),
                                content))
-
-    def makelink(self, title, link):
-        html = "<A HREF=\""+str(link)+".html\">"+str(title)+"</A>"
-        return html
 
     def outputTOC(self):
         self.pages.sort(lambda x, y: cmp(x.date, y.date))
@@ -74,7 +83,7 @@ class TOC:
         print >>file, "<UL>"
         
         for p in self.pages:
-            print >>file, "<LI>", self.makelink(p.title, p.link)
+            print >>file, "<LI>", p.makelink()
 
         print >>file, "</UL>"
         file.write("</div>\n")
